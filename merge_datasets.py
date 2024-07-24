@@ -1,3 +1,9 @@
+# Paths for data.
+Ravdess = "/kaggle/input/ravdess-emotional-speech-audio/audio_speech_actors_01-24/"
+Crema = "/kaggle/input/cremad/AudioWAV/"
+Tess = "/kaggle/input/toronto-emotional-speech-set-tess/tess toronto emotional speech set data/TESS Toronto emotional speech set data/"
+Savee = "/kaggle/input/surrey-audiovisual-expressed-emotion-savee/ALL/"
+
 ravdess_directory_list = os.listdir(Ravdess)
 
 file_emotion = []
@@ -48,6 +54,7 @@ emotion_df = pd.DataFrame(file_emotion, columns=['Emotions'])
 path_df = pd.DataFrame(file_path, columns=['Path'])
 Crema_df = pd.concat([emotion_df, path_df], axis=1)
 Crema_df.head()
+
 
 tess_directory_list = os.listdir(Tess)
 
@@ -101,6 +108,7 @@ path_df = pd.DataFrame(file_path, columns=['Path'])
 Savee_df = pd.concat([emotion_df, path_df], axis=1)
 Savee_df.head()
 
+linkcode
 # creare DataFrame cu toate seturile de date
 data_path = pd.concat([Ravdess_df, Crema_df, Tess_df, Savee_df], axis = 0)
 data_path.to_csv("data_path.csv",index=False)
@@ -112,7 +120,7 @@ rows_to_drop = []
 for index, row in data_path.iterrows():
     if row['Emotions'] == 'disgust':
         rows_to_drop.append(index)
-​
+
 # Eliminăm rândurile corespunzătoare din DataFrame
 data_path.drop(rows_to_drop, inplace=True)
 data_path.shape
@@ -152,22 +160,4 @@ for index, row in data_path.iterrows():
 data_path.drop(rows_to_drop, inplace=True)
 
 # Verificăm dimensiunea DataFrame-ului după eliminare
-
-def noise(data):
-    noise_amp = 0.035*np.random.uniform()*np.amax(data)
-    data = data + noise_amp*np.random.normal(size=data.shape[0])
-    return data
-
-def stretch(data, rate=0.8):
-    return librosa.effects.time_stretch(data, rate=rate)
-
-def shift(data):
-    shift_range = int(np.random.uniform(low=-5, high = 5)*1000)
-    return np.roll(data, shift_range)
-
-def pitch(data, sampling_rate, n_steps=0.7):
-    return librosa.effects.pitch_shift(data, sr=sampling_rate, n_steps=n_steps)
-
-path = np.array(data_path.Path)[1]
-data, sample_rate = librosa.load(path)
 print(data_path.shape)
